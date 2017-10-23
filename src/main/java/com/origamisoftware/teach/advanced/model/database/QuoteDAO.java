@@ -17,20 +17,17 @@ import java.sql.Timestamp;
  * Models the quote table
  */
 @Entity
-@Table(name = "quote", schema = "", catalog = "stocks")
+@Table(name = "quote", catalog = "stocks")
 public class QuoteDAO implements DatabasesAccessObject {
     private int id;
     private Timestamp time;
     private BigDecimal price;
     private StockSymbolDAO stockSymbolBySymbolId;
 
-    public QuoteDAO() {
-    }
-
-    public QuoteDAO(Timestamp time, BigDecimal price, StockSymbolDAO stockSymbolBySymbolId) {
+    public QuoteDAO(Timestamp time, BigDecimal price) {
         this.time = time;
         this.price = price;
-        this.stockSymbolBySymbolId = stockSymbolBySymbolId;
+        //this.stockSymbolBySymbolId = stockSymbolBySymbolId;
     }
 
     @Id

@@ -9,7 +9,17 @@
       <case-sensitivity plain-identifiers="mixed" quoted-identifiers="upper" />
       <secret-storage>master_key</secret-storage>
       <user-name>monty</user-name>
-      <introspection-schemas>*:information_schema</introspection-schemas>
+      <introspection-schemas>*:information_schema,stocks</introspection-schemas>
+    </data-source>
+    <data-source name="stocks@localhost" uuid="a2ba1b34-df00-485d-abf4-ba2906c3fa04">
+      <database-info product="MySQL" version="5.7.19" jdbc-version="4.0" driver-name="MySQL Connector Java" driver-version="mysql-connector-java-5.1.40 ( Revision: 402933ef52cad9aa82624e80acbea46e3a701ce6 )">
+        <extra-name-characters>#@</extra-name-characters>
+        <identifier-quote-string>`</identifier-quote-string>
+      </database-info>
+      <case-sensitivity plain-identifiers="mixed" quoted-identifiers="upper" />
+      <secret-storage>master_key</secret-storage>
+      <user-name>monty</user-name>
+      <introspection-schemas>*:stocks</introspection-schemas>
     </data-source>
   </component>
 </project>

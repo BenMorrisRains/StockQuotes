@@ -14,6 +14,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import java.io.File;
 import java.math.BigDecimal;
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -143,7 +144,6 @@ public class BasicStockQuoteApplication {
 
             Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
             Stocks stocks = (Stocks) unmarshaller.unmarshal(file);
-            System.out.println(stocks.toString());
 
             // now we have a list of stock info objects
 
@@ -151,13 +151,9 @@ public class BasicStockQuoteApplication {
         List<Stocks.Stock> stockList = stocks.getStock();
         List<QuoteDAO> quotes = new ArrayList<>(stockList.size());
         for (Stocks.Stock stock : stockList) {
-            stock.getPrice();
-            Timestamp ts = new Timestamp(2015 - 01 - 01);
-            BigDecimal price = new BigDecimal(150.00);
-            StockSymbolDAO amazon = new StockSymbolDAO();
-            amazon.setSymbol("AMZN");
             //do the conversion
-            quotes.add(new QuoteDAO(ts, price, amazon));
+            BigDecimal price = new BigDecimal(stock.getPrice());
+            quotes.add(new QuoteDAO(Timestamp.valueOf(stock.getTime()), price));
         }
         } catch (JAXBException e) {
             System.out.println("Error " + e);
