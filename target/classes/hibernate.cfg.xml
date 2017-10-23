@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+
+        <!-- This file contains installation specific properties used by the -->
+        <!-- HibernateUtils class.  Applications should place this file in  -->
+        <!-- the root of their class path with appropriate production values. -->
+
+        <property name="connection.url">jdbc:mysql://localhost:3306/stocks</property>
+        <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+
+        <property name="hibernate.connection.username">monty</property>
+        <property name="hibernate.connection.password">some_pass</property>
+
+        <mapping class="com.origamisoftware.teach.advanced.model.database.PersonDAO"/>
+        <mapping class="com.origamisoftware.teach.advanced.model.database.PersonStocksDAO"/>
+        <mapping class="com.origamisoftware.teach.advanced.model.database.QuoteDAO"/>
+        <mapping class="com.origamisoftware.teach.advanced.model.database.StockSymbolDAO"/>
+
+
+    </session-factory>
+</hibernate-configuration>

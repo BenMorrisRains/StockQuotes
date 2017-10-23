@@ -1,5 +1,7 @@
 package com.origamisoftware.teach.advanced.model.database;
 
+import com.origamisoftware.teach.advanced.apps.Stocks;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -21,6 +23,15 @@ public class QuoteDAO implements DatabasesAccessObject {
     private Timestamp time;
     private BigDecimal price;
     private StockSymbolDAO stockSymbolBySymbolId;
+
+    public QuoteDAO() {
+    }
+
+    public QuoteDAO(Timestamp time, BigDecimal price, StockSymbolDAO stockSymbolBySymbolId) {
+        this.time = time;
+        this.price = price;
+        this.stockSymbolBySymbolId = stockSymbolBySymbolId;
+    }
 
     @Id
     @Column(name = "id",  nullable = false, insertable = true, updatable = true)

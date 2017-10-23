@@ -3,23 +3,35 @@ package com.origamisoftware.teach.advanced.apps.stockquote;
 import com.origamisoftware.teach.advanced.apps.Stocks;
 import com.origamisoftware.teach.advanced.model.StockQuery;
 import com.origamisoftware.teach.advanced.model.StockQuote;
+import com.origamisoftware.teach.advanced.model.database.QuoteDAO;
+import com.origamisoftware.teach.advanced.model.database.StockSymbolDAO;
 import com.origamisoftware.teach.advanced.services.StockService;
 import com.origamisoftware.teach.advanced.services.StockServiceException;
 import com.origamisoftware.teach.advanced.util.Interval;
+
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
-import java.io.StringReader;
+import java.io.File;
+import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * A simple application that shows the StockService in action.
- *
  */
 public class BasicStockQuoteApplication {
 
-
+    private static String xmlInstance = "<stocks>\n" +
+            "    <symbol=\"40\">Fred</symbol>\n" +
+            "    <price=\"40\">Sally</price>\n" +
+            "    <time>\n" +
+            "        <child age=\"11\" grade=\"5\">Peter</child>\n" +
+            "        <child age=\"15\" grade=\"9\">Bill</child>\n" +
+            "        <child age=\"09\" grade=\"3\">Sally</child>\n" +
+            "    </time>\n" +
+            "</stocks>";
 
     private StockService stockService;
 
@@ -124,18 +136,31 @@ public class BasicStockQuoteApplication {
      */
     public static void main(String[] args) throws JAXBException {
 
-        JAXBContext jaxbContext = JAXBContext.newInstance(Stocks.class);
-        Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-        Stocks stocks = (Stocks) unmarshaller.unmarshal(new StringReader());
-        System.out.println(stocks.toString());
+        try {
+            // from XML to Java
+            File file = new File("stock_info.xml");
+            JAXBContext jaxbContext = JAXBContext.newInstance(Stocks.class);
 
-        // here is how to go from Java to XML
-        JAXBContext context = JAXBContext.newInstance(Stocks.class);
-        Marshaller marshaller = context.createMarshaller();
-        //for pretty-print XML in JAXB
-        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-        marshaller.marshal(stocks, System.out);
+            Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+            Stocks stocks = (Stocks) unmarshaller.unmarshal(file);
+            System.out.println(stocks.toString());
 
+            // now we have a list of stock info objects
 
+       //convert them to ORMs
+        List<Stocks.Stock> stockList = stocks.getStock();
+        List<QuoteDAO> quotes = new ArrayList<>(stockList.size());
+        for (Stocks.Stock stock : stockList) {
+            stock.getPrice();
+            Timestamp ts = new Timestamp(2015 - 01 - 01);
+            BigDecimal price = new BigDecimal(150.00);
+            StockSymbolDAO amazon = new StockSymbolDAO();
+            amazon.setSymbol("AMZN");
+            //do the conversion
+            quotes.add(new QuoteDAO(ts, price, amazon));
+        }
+        } catch (JAXBException e) {
+            System.out.println("Error " + e);
+        }
     }
 }
