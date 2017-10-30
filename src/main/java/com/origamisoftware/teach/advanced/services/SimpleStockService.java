@@ -2,6 +2,7 @@ package com.origamisoftware.teach.advanced.services;
 
 import com.origamisoftware.teach.advanced.model.StockQuote;
 import com.origamisoftware.teach.advanced.util.Interval;
+import yahoofinance.Stock;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

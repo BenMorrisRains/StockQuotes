@@ -2,7 +2,9 @@ package com.origamisoftware.teach.advanced.services;
 
 import com.origamisoftware.teach.advanced.model.StockQuote;
 import com.origamisoftware.teach.advanced.util.Interval;
+import yahoofinance.Stock;
 
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.List;
 
@@ -22,7 +24,7 @@ public interface StockService {
      *                               If this happens, trying the service may work, depending on the actual cause of the
      *                               error.
      */
-    StockQuote getQuote(String symbol) throws StockServiceException;
+    StockQuote getQuote(String symbol) throws StockServiceException, IOException;
 
     /**
      * Get a historical list of stock quotes for the provide symbol

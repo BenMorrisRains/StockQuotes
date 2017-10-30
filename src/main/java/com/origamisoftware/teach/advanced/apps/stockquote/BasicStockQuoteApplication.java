@@ -3,12 +3,15 @@ package com.origamisoftware.teach.advanced.apps.stockquote;
 import com.origamisoftware.teach.advanced.apps.Stocks;
 import com.origamisoftware.teach.advanced.model.StockQuery;
 import com.origamisoftware.teach.advanced.model.StockQuote;
+import com.origamisoftware.teach.advanced.model.YahooStockQuote;
 import com.origamisoftware.teach.advanced.model.database.QuoteDAO;
 import com.origamisoftware.teach.advanced.model.database.StockSymbolDAO;
-import com.origamisoftware.teach.advanced.services.StockService;
-import com.origamisoftware.teach.advanced.services.StockServiceException;
+import com.origamisoftware.teach.advanced.services.*;
 import com.origamisoftware.teach.advanced.util.Interval;
+import yahoofinance.Stock;
+import yahoofinance.YahooFinance;
 
+import javax.persistence.Basic;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
@@ -16,25 +19,22 @@ import java.io.File;
 import java.math.BigDecimal;
 import java.sql.Time;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * A simple application that shows the StockService in action.
  */
 public class BasicStockQuoteApplication {
 
-    private static String xmlInstance = "<stocks>\n" +
-            "    <symbol=\"40\">Fred</symbol>\n" +
-            "    <price=\"40\">Sally</price>\n" +
-            "    <time>\n" +
-            "        <child age=\"11\" grade=\"5\">Peter</child>\n" +
-            "        <child age=\"15\" grade=\"9\">Bill</child>\n" +
-            "        <child age=\"09\" grade=\"3\">Sally</child>\n" +
-            "    </time>\n" +
-            "</stocks>";
-
     private StockService stockService;
+    private YahooStockService yahooStockService;
+
+    public BasicStockQuoteApplication(YahooStockService yahooStockService) {
+
+        this.yahooStockService = yahooStockService;
+    }
 
     // an example of how to use enum - not part of assignment 3 but useful for assignment 4
 
@@ -106,6 +106,22 @@ public class BasicStockQuoteApplication {
         return stringBuilder.toString();
     }
 
+    public String displayYahooStockQuotes(YahooStockQuote yahooStockQuote) throws StockServiceException {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        List<StockQuote> stockQuotes =
+                stockService.getQuote(yahooStockQuote.getSymbol(),
+                        yahooStockQuote.getFrom(),
+                        yahooStockQuote.getTo(),
+                        Interval.DAY); // get one quote for each day in the from until date range.
+
+        stringBuilder.append("Stock quotes for: " + yahooStockQuote.getSymbol() + "\n");
+        for (StockQuote stockQuote : stockQuotes) {
+            stringBuilder.append(stockQuote.toString());
+        }
+
+        return stringBuilder.toString();
+    }
     /**
      * Terminate the application.
      *
@@ -129,6 +145,8 @@ public class BasicStockQuoteApplication {
         System.exit(statusCode.getStatusCode());
     }
 
+
+
     /**
      * Run the StockTicker application.
      * <p/>
@@ -137,8 +155,11 @@ public class BasicStockQuoteApplication {
      */
     public static void main(String[] args) throws JAXBException {
 
-        try {
+       /* try {
             // from XML to Java
+            *//**
+             * Reads XML file and converts to Java objects using JAXB
+             *//*
             File file = new File("stock_info.xml");
             JAXBContext jaxbContext = JAXBContext.newInstance(Stocks.class);
 
@@ -147,16 +168,73 @@ public class BasicStockQuoteApplication {
 
             // now we have a list of stock info objects
 
-       //convert them to ORMs
-        List<Stocks.Stock> stockList = stocks.getStock();
-        List<QuoteDAO> quotes = new ArrayList<>(stockList.size());
-        for (Stocks.Stock stock : stockList) {
-            //do the conversion
-            BigDecimal price = new BigDecimal(stock.getPrice());
-            quotes.add(new QuoteDAO(Timestamp.valueOf(stock.getTime()), price));
-        }
+            //convert them to ORMs
+            List<Stocks.Stock> stockList = stocks.getStock();
+            List<QuoteDAO> quotes = new ArrayList<>(stockList.size());
+            for (Stocks.Stock stock : stockList) {
+                //do the conversion
+                BigDecimal price = new BigDecimal(stock.getPrice());
+                StockSymbolDAO symbol = new StockSymbolDAO(stock.getSymbol());
+                quotes.add(new QuoteDAO(Timestamp.valueOf(stock.getTime()), price, symbol));
+            }
+            *//**
+             * Printed the ArrayList to show that the conversion is actually happening.
+             *//*
+            System.out.println(Arrays.toString(new List[]{quotes}));
+
+
+
         } catch (JAXBException e) {
             System.out.println("Error " + e);
         }
+*/
+        // be optimistic init to positive values
+        ProgramTerminationStatusEnum exitStatus = ProgramTerminationStatusEnum.NORMAL;
+        String programTerminationMessage = "Normal program termination.";
+        if (args.length != 4) {
+            exit(ProgramTerminationStatusEnum.ABNORMAL,
+                    "Please supply 3 arguments a stock symbol, a start date (MM/DD/YYYY) and end date (MM/DD/YYYY)");
+        }
+        try {
+
+            YahooStockService stockService = YahooStockServiceFactory.getYahooStockService();
+
+
+            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+
+            Date fromDate = sdf.parse(args[1]);
+            Calendar from = Calendar.getInstance();
+            from.setTime(fromDate);
+
+            Date toDate = sdf.parse(args[2]);
+            Calendar to = Calendar.getInstance();
+            to.setTime(toDate);
+            yahoofinance.histquotes.Interval interval = yahoofinance.histquotes.Interval.valueOf(args[3]);
+
+
+            Stock getQuote = YahooFinance.get(args[0], from, to, interval);
+//            YahooStockService yahooStockService = YahooStockServiceFactory.getYahooStockService();
+//            BasicStockQuoteApplication basicStockQuoteApplication = new BasicStockQuoteApplication(yahooStockService);
+            System.out.println(getQuote.getHistory());
+
+           /* StockQuery stockQuery = new StockQuery(args[0], args[1], args[2]);
+            StockService stockService = ServiceFactory.getStockService();
+            BasicStockQuoteApplication basicStockQuoteApplication2 =
+                    new BasicStockQuoteApplication(stockService);
+            basicStockQuoteApplication2.displayStockQuotes(stockQuery);
+            System.out.println(basicStockQuoteApplication2.displayStockQuotes(stockQuery));
+*/
+
+
+        } catch (ParseException e) {
+            exitStatus = ProgramTerminationStatusEnum.ABNORMAL;
+            programTerminationMessage = "Invalid date data: " + e.getMessage();
+        } catch (Throwable t) {
+            exitStatus = ProgramTerminationStatusEnum.ABNORMAL;
+            programTerminationMessage = "General application error: " + t.getMessage();
+        }
+
+        exit(exitStatus, programTerminationMessage);
+        System.out.println("Oops could not parse a date");
     }
 }

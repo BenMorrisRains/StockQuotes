@@ -21,5 +21,14 @@
       <user-name>monty</user-name>
       <introspection-schemas>*:stocks</introspection-schemas>
     </data-source>
+    <data-source name="hibernate.cfg.xml/Hibernate" uuid="f41b78fa-a448-4508-a503-5ce0e61e6e4e">
+      <database-info product="MySQL" version="5.7.19" jdbc-version="4.0" driver-name="MySQL Connector Java" driver-version="mysql-connector-java-5.1.40 ( Revision: 402933ef52cad9aa82624e80acbea46e3a701ce6 )">
+        <extra-name-characters>#@</extra-name-characters>
+        <identifier-quote-string>`</identifier-quote-string>
+      </database-info>
+      <case-sensitivity plain-identifiers="mixed" quoted-identifiers="upper" />
+      <user-name>monty</user-name>
+      <introspection-schemas>*:stocks</introspection-schemas>
+    </data-source>
   </component>
 </project>

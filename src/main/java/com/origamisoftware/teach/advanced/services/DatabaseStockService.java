@@ -10,6 +10,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
+import yahoofinance.Stock;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -34,7 +35,7 @@ class DatabaseStockService implements StockService {
      *                               error.
      */
     @Override
-    public StockQuote getQuote(String symbol) throws StockServiceException {
+    public Stock getQuote(String symbol) throws StockServiceException {
         StockQuote stockQuote;
 
         StockSymbolDAO stockSymbolDAO = DatabaseUtils.findUniqueResultBy("symbol", symbol, StockSymbolDAO.class, true);

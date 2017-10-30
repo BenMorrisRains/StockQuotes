@@ -7,10 +7,12 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="week-6-stock-ticker-solution" />
+        <module name="Week6_ BenMorrisRains" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="week-6-stock-ticker-solution" target="1.8" />
+      <module name="Week6_ BenMorrisRains" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

@@ -15,6 +15,13 @@ public class StockSymbolDAO implements DatabasesAccessObject {
     private int id;
     private String symbol;
 
+    public StockSymbolDAO(String symbol) {
+        this.symbol = symbol;
+    }
+
+    public StockSymbolDAO() {
+    }
+
     @Id
     @Column(name = "id", nullable = false, insertable = true, updatable = true)
     public int getId() {
@@ -53,5 +60,10 @@ public class StockSymbolDAO implements DatabasesAccessObject {
         int result = id;
         result = 31 * result + (symbol != null ? symbol.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return symbol;
     }
 }

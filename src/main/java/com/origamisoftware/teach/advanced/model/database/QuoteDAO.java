@@ -24,10 +24,13 @@ public class QuoteDAO implements DatabasesAccessObject {
     private BigDecimal price;
     private StockSymbolDAO stockSymbolBySymbolId;
 
-    public QuoteDAO(Timestamp time, BigDecimal price) {
+    public QuoteDAO(Timestamp time, BigDecimal price, StockSymbolDAO stockSymbolBySymbolId) {
         this.time = time;
         this.price = price;
-        //this.stockSymbolBySymbolId = stockSymbolBySymbolId;
+        this.stockSymbolBySymbolId = stockSymbolBySymbolId;
+    }
+
+    public QuoteDAO() {
     }
 
     @Id
@@ -91,5 +94,10 @@ public class QuoteDAO implements DatabasesAccessObject {
 
     public void setStockSymbolBySymbolId(StockSymbolDAO stockSymbolBySymbolId) {
         this.stockSymbolBySymbolId = stockSymbolBySymbolId;
+    }
+
+    @Override
+    public String toString() {
+        return "Symbol: " + stockSymbolBySymbolId + " Price: " + price + " Time: " + time;
     }
 }
