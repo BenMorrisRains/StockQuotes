@@ -1,28 +1,22 @@
 package com.origamisoftware.teach.advanced.model;
 
-import com.origamisoftware.teach.advanced.services.YahooStockService;
-import yahoofinance.Stock;
 import yahoofinance.YahooFinance;
 import yahoofinance.histquotes.Interval;
 
 import java.util.Calendar;
 
-public class YahooStockQuote extends YahooFinance {
+public class Stock extends YahooFinance{
 
-        private String symbol;
-        private Calendar from;
-        private Calendar to;
-        private Interval interval;
+    private String symbol;
+    private Calendar from;
+    private Calendar to;
+    private Interval interval;
 
-    public YahooStockQuote(String symbol, Calendar from, Calendar to, Interval interval) {
+    public Stock(String symbol, Calendar from, Calendar to, Interval interval) {
         this.symbol = symbol;
         this.from = from;
         this.to = to;
         this.interval = interval;
-    }
-
-    public YahooStockQuote() {
-
     }
 
     public String getSymbol() {
@@ -56,15 +50,4 @@ public class YahooStockQuote extends YahooFinance {
     public void setInterval(Interval interval) {
         this.interval = interval;
     }
-
-    @Override
-    public String toString() {
-        return "YahooStockQuote{" +
-                "symbol='" + symbol + '\'' +
-                ", from=" + from +
-                ", to=" + to +
-                ", interval=" + interval +
-                '}';
-    }
 }
-

@@ -28,6 +28,7 @@ import java.util.List;
     @Override
     public StockQuote getQuote(String symbol) {
         // a dead simple implementation.
+
         return new StockQuote(new BigDecimal(100), Calendar.getInstance().getTime(), symbol);
     }
 
