@@ -67,7 +67,7 @@ public class BasicStockQuoteApplicationTest {
     }
 
     @Test(expected = NullPointerException.class)
-    public void testMainNegative() throws JAXBException {
+    public void testMainNegative() throws JAXBException, ParseException {
         BasicStockQuoteApplication.main(null);
     }
 }

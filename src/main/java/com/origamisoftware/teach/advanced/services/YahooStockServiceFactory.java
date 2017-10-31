@@ -7,6 +7,6 @@ public class YahooStockServiceFactory {
     }
 
     public static YahooStockService getYahooStockService() {
-        return new YahooSimpleStockService();
+        return new YahooStockService();
     }
 }

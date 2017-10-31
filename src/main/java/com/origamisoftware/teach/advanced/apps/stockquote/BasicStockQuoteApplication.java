@@ -1,26 +1,12 @@
 package com.origamisoftware.teach.advanced.apps.stockquote;
 
-import com.origamisoftware.teach.advanced.apps.Stocks;
 import com.origamisoftware.teach.advanced.model.StockQuery;
 import com.origamisoftware.teach.advanced.model.StockQuote;
-import com.origamisoftware.teach.advanced.model.YahooStockQuote;
-import com.origamisoftware.teach.advanced.model.database.QuoteDAO;
-import com.origamisoftware.teach.advanced.model.database.StockSymbolDAO;
 import com.origamisoftware.teach.advanced.services.*;
 import com.origamisoftware.teach.advanced.util.Interval;
-import yahoofinance.Stock;
-import yahoofinance.YahooFinance;
 
-import javax.persistence.Basic;
-import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
-import java.io.File;
-import java.math.BigDecimal;
-import java.sql.Time;
-import java.sql.Timestamp;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -106,22 +92,7 @@ public class BasicStockQuoteApplication {
         return stringBuilder.toString();
     }
 
-    public String displayYahooStockQuotes(YahooStockQuote yahooStockQuote) throws StockServiceException {
-        StringBuilder stringBuilder = new StringBuilder();
 
-        List<StockQuote> stockQuotes =
-                stockService.getQuote(yahooStockQuote.getSymbol(),
-                        yahooStockQuote.getFrom(),
-                        yahooStockQuote.getTo(),
-                        Interval.DAY); // get one quote for each day in the from until date range.
-
-        stringBuilder.append("Stock quotes for: " + yahooStockQuote.getSymbol() + "\n");
-        for (StockQuote stockQuote : stockQuotes) {
-            stringBuilder.append(stockQuote.toString());
-        }
-
-        return stringBuilder.toString();
-    }
     /**
      * Terminate the application.
      *
@@ -153,7 +124,7 @@ public class BasicStockQuoteApplication {
      *
      * @param args one or more stock symbols
      */
-    public static void main(String[] args) throws JAXBException {
+    public static void main(String[] args) throws JAXBException, ParseException {
 
        /* try {
             // from XML to Java
@@ -197,38 +168,18 @@ public class BasicStockQuoteApplication {
         }
         try {
 
-            YahooStockService stockService = YahooStockServiceFactory.getYahooStockService();
+            YahooStockService yahooStockService = YahooStockServiceFactory.getYahooStockService();
+            System.out.println(yahooStockService.getQuote(args[0]));
 
-
-            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
-
-            Date fromDate = sdf.parse(args[1]);
-            Calendar from = Calendar.getInstance();
-            from.setTime(fromDate);
-
-            Date toDate = sdf.parse(args[2]);
-            Calendar to = Calendar.getInstance();
-            to.setTime(toDate);
-            yahoofinance.histquotes.Interval interval = yahoofinance.histquotes.Interval.valueOf(args[3]);
-
-
-            Stock getQuote = YahooFinance.get(args[0], from, to, interval);
-//            YahooStockService yahooStockService = YahooStockServiceFactory.getYahooStockService();
-//            BasicStockQuoteApplication basicStockQuoteApplication = new BasicStockQuoteApplication(yahooStockService);
-            System.out.println(getQuote.getHistory());
-
-           /* StockQuery stockQuery = new StockQuery(args[0], args[1], args[2]);
+            StockQuery stockQuery = new StockQuery(args[0], args[1], args[2]);
             StockService stockService = ServiceFactory.getStockService();
             BasicStockQuoteApplication basicStockQuoteApplication2 =
                     new BasicStockQuoteApplication(stockService);
             basicStockQuoteApplication2.displayStockQuotes(stockQuery);
             System.out.println(basicStockQuoteApplication2.displayStockQuotes(stockQuery));
-*/
 
 
-        } catch (ParseException e) {
-            exitStatus = ProgramTerminationStatusEnum.ABNORMAL;
-            programTerminationMessage = "Invalid date data: " + e.getMessage();
+
         } catch (Throwable t) {
             exitStatus = ProgramTerminationStatusEnum.ABNORMAL;
             programTerminationMessage = "General application error: " + t.getMessage();
