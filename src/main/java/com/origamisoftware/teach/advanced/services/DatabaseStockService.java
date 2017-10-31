@@ -35,7 +35,7 @@ class DatabaseStockService implements StockService {
      *                               error.
      */
     @Override
-    public Stock getQuote(String symbol) throws StockServiceException {
+    public StockQuote getQuote(String symbol) throws StockServiceException {
         StockQuote stockQuote;
 
         StockSymbolDAO stockSymbolDAO = DatabaseUtils.findUniqueResultBy("symbol", symbol, StockSymbolDAO.class, true);

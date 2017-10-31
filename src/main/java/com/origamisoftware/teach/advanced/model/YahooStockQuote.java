@@ -1,7 +1,5 @@
 package com.origamisoftware.teach.advanced.model;
 
-import com.origamisoftware.teach.advanced.services.YahooStockService;
-import yahoofinance.Stock;
 import yahoofinance.YahooFinance;
 import yahoofinance.histquotes.Interval;
 
